@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi Pegawai</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f3f3;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #005fcc;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8ffe8;
+            border-left: 5px solid #00b300;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Absensi Pegawai</h2>
+
+    <label>Nama Pegawai</label>
+    <input type="text" id="nama" placeholder="Masukkan nama">
+
+    <label>Jabatan</label>
+    <select id="jabatan">
+        <option value="Cost Controller">Cost Controller</option>
+        <option value="Drilling Engineer">Drilling Engineer</option>
+        <option value="Engineer Assistant">Engineer Assistant</option>
+    </select>
+
+    <button onclick="checkIn()">Check-In</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+function checkIn() {
+    let nama = document.getElementById("nama").value;
+    let jabatan = document.getElementById("jabatan").value;
+    let result = document.getElementById("result");
+
+    if (nama.trim() === "") {
+        alert("Nama harus diisi!");
+        return;
+    }
+
+    if (!navigator.geolocation) {
+        alert("GPS tidak tersedia di perangkat ini.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error);
+
+    function success(position) {
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
+        let waktu = new Date().toLocaleString();
+
+        result.style.display = "block";
+        result.innerHTML = `
+            <b>Check-in berhasil!</b><br><br>
+            Nama: ${nama}<br>
+            Jabatan: ${jabatan}<br>
+            Waktu: ${waktu}<br>
+            Lokasi:<br>
+            Latitude: ${lat}<br>
+            Longitude: ${lon}
+        `;
+    }
+
+    function error() {
+        alert("GPS tidak aktif / izin lokasi ditolak.");
+    }
+}
+</script>
+
+</body>
+</html>
